@@ -1,0 +1,90 @@
+body {
+    display: flex;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+    font-family: inherit;
+}
+
+main {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    height: 60%;
+    padding: 20px;
+    background-color: rgb(115, 115, 115);
+    border: 2px black solid;
+    border-radius: 15px;
+}
+#display {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    background-color: rgb(230, 228, 228);
+    border-radius: 5px;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#inputDiv {
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+#outputDiv {
+    text-align: right;
+    font-size: 1.8rem;
+    margin-top: auto;
+}
+
+#buttonGrid {
+    height: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+
+}
+
+.btn {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px black solid;
+    font-size: 1.2rem;
+}
+.operator {
+    font-size: 1.5rem;
+}
+
+.btn:hover {
+    background-color: #d9d9d9;
+}
+
+.operator:hover {
+    background-color: #9ac6ff;
+}
+.equals:hover {
+    background-color: #93eb93;
+}
+
+#clearBtn, #deleteBtn {
+    grid-column: span 2;
+    font-size: 1.4rem;
+}
+
+#clearBtn {
+    background-color: #FFA0A0;
+}
+#clearBtn:hover {
+    background-color: #ff8080 ;
+}
+
+#deleteBtn {
+    background-color: #faf1a2;
+}
+#deleteBtn:hover {
+    background-color: #f6e655;
+}
