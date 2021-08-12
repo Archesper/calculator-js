@@ -48,6 +48,7 @@ function operatorClick(e) {
             }
             else {
                 equalsCompute();
+                if (output.textContent === 'ZERO DIVISION ERROR') {break;}
                 display.textContent = `${output.textContent} ${operator} `;
                 currentNumber1 = Number(output.textContent);
                 currentOperator = operator;
@@ -55,10 +56,9 @@ function operatorClick(e) {
             }
             break
         case 3: // Result has been computed, step is for chaining operations
-            if (isNaN(output.textContent)) {
-                output.textContent = '';
-                display.textContent = '';
-                currentStep = 1;
+            // If last reached result was a ZERO DIVISION ERROR, clear the calculator
+            if (output.textContent === 'ZERO DIVISION ERROR') {
+                clearDisplay();
                 break;
             }
             console.log('runs');
