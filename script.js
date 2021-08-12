@@ -10,7 +10,8 @@ buttons.filter(button => 'value' in button.dataset)
 buttons.filter(button => button.classList.contains('operator'))
        .forEach(button => button.addEventListener('click', operatorClick));
 buttons.find(button => button.classList.contains('equals')).addEventListener('click', equalsCompute);
-        
+document.getElementById('clearBtn').addEventListener('click', clearDisplay);
+
 let currentStep = 1; // Variable for keeping track of user input
 let currentNumber1; 
 let currentOperator;
@@ -98,4 +99,12 @@ function equalsCompute() {
     const result = operate(currentNumber1, currentNumber2, currentOperator);
     output.textContent = result;
     currentStep = 3;
+}
+
+function clearDisplay() {
+    display.textContent = '';
+    output.textContent = '';
+    currentStep = 1;
+    currentNumber1 = undefined;
+    currentOperator = undefined;
 }
