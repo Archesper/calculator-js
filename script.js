@@ -41,9 +41,17 @@ function operatorClick(e) {
             break
 
         case 2: // Operator has been chosen, inputting second number
-            if (operator !== currentOperator) {
+            let currentInput = display.textContent.split(currentOperator);
+            if (operator !== currentOperator && currentInput[currentInput.length - 1].trim() === "") {
                 display.textContent = display.textContent.replace(currentOperator, operator);
                 currentOperator = operator;
+            }
+            else {
+                equalsCompute();
+                display.textContent = `${output.textContent} ${operator} `;
+                currentNumber1 = Number(output.textContent);
+                currentOperator = operator;
+                currentStep = 2;
             }
             break
         case 3: // Result has been computed, step is for chaining operations
@@ -89,8 +97,10 @@ function operate(n1, n2, operator) {
 
 function equalsCompute() {
     let currentInput = display.textContent.split(currentOperator);
+    console.log(currentInput);
     let currentNumber2 = Number(currentInput[currentInput.length - 1]);
-    if (currentStep != 2 || isNaN(currentNumber2)) { // ignores equal click before having a full expression to compute
+    if (currentStep != 2 || isNaN(currentNumber2) ||
+     currentInput[currentInput.length - 1].trim() === "") { // ignores equal click before having a full expression to compute
         return;
     }
     console.log(currentNumber1);
