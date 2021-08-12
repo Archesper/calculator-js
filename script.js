@@ -96,6 +96,9 @@ function operate(n1, n2, operator) {
 }
 
 function equalsCompute() {
+    if (output.textContent === 'ZERO DIVISION ERROR') {
+        clearDisplay();
+    }
     let currentInput = display.textContent.split(currentOperator);
     console.log(currentInput);
     let currentNumber2 = Number(currentInput[currentInput.length - 1]);
