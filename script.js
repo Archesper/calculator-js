@@ -16,15 +16,39 @@ document.getElementById('deleteBtn').addEventListener('click', backspace);
 let currentStep = 1; // Variable for keeping track of user input
 let currentNumber1; 
 let currentOperator;
+let alreadyDecimal = false; // variable for keeping track if user has already input a decimal dot in current phase
 
 function populateDisplay(e) {
-    if (currentStep === 3) { // If a result was just output, clear output screen 
-        display.textContent = e.target.dataset.value;
+    const value = e.target.dataset.value;
+    if (currentStep === 3 && value !== '.') { // If a result was just output, clear output screen 
+        display.textContent = value;
         output.textContent = '';
         currentStep = 1;
+        toggleAlreadyDecimal(false);
     }
     else {
-        display.textContent += e.target.dataset.value;
+        // If user is inputting a decimal point:
+        if (value === '.') {
+            // In step 1, add decimal point if there is already a number in the display and a decimal point has yet to be input
+            if (currentStep === 1
+                && display.textContent.trim() !== ''
+                && alreadyDecimal === false) {
+                    console.log('this');
+                    display.textContent += value;
+                    toggleAlreadyDecimal(true);
+                }
+            else if (currentStep === 2
+                && alreadyDecimal === false) {
+                    let currentInput = display.textContent.split(currentOperator);
+                    if (currentInput[currentInput.length - 1].trim() !== '') {
+                        display.textContent += value;
+                        toggleAlreadyDecimal(true);
+                    }
+                }
+        }
+        else if (value !== '.') {
+            display.textContent += value;
+        }
     }
 }
 
@@ -39,6 +63,7 @@ function operatorClick(e) {
             display.textContent += ` ${operator} `;
             currentOperator = operator;
             currentStep = 2;
+            toggleAlreadyDecimal(false);
             break
 
         case 2: // Operator has been chosen, inputting second number
@@ -54,6 +79,7 @@ function operatorClick(e) {
                 currentNumber1 = Number(output.textContent);
                 currentOperator = operator;
                 currentStep = 2;
+                toggleAlreadyDecimal(false);
             }
             break
         case 3: // Result has been computed, step is for chaining operations
@@ -62,13 +88,13 @@ function operatorClick(e) {
                 clearDisplay();
                 break;
             }
-            console.log('runs');
             const lastNumber = Number(output.textContent);
             display.textContent = `${lastNumber} ${operator} `;
             currentNumber1 = lastNumber;
             currentOperator = operator;
             output.textContent = '';
             currentStep = 2;
+            toggleAlreadyDecimal(false);
     }
 }
 
@@ -121,11 +147,15 @@ function clearDisplay() {
     currentStep = 1;
     currentNumber1 = undefined;
     currentOperator = undefined;
+    toggleAlreadyDecimal(false);
 }
 
 function backspace() {
     switch (currentStep) {
         case 1:
+            if (display.textContent[display.textContent.length - 1] === '.') {
+                toggleAlreadyDecimal(false);
+            }
             display.textContent = display.textContent.slice(0, -1);
             break;
         case 2:
@@ -136,11 +166,26 @@ function backspace() {
                 currentStep = 1;
             }
             else {
+                if (display.textContent[display.textContent.length - 1] === '.') {
+                    toggleAlreadyDecimal(false);
+                }
                 display.textContent = display.textContent.slice(0, -1);
             }
             break;
         case 3:
             output.textContent = '';
             currentStep = 2;
+    }
+}
+
+function toggleAlreadyDecimal(bool) {
+    const decimalButton = document.querySelector('.decimal');
+    if (bool) {
+        alreadyDecimal = true;
+        decimalButton.classList.add('inactive');
+    }
+    else {
+        alreadyDecimal = false;
+        decimalButton.classList.remove('inactive');
     }
 }

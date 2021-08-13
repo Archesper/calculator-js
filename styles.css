@@ -89,3 +89,8 @@ main {
 #deleteBtn:hover {
     background-color: #f6e655;
 }
+
+.decimal.inactive {
+    background-color: rgb(160, 160, 160);
+    cursor: default;
+}
