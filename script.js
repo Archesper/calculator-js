@@ -8,11 +8,11 @@ const output = document.getElementById('outputDiv');
 // Keys are event code arrays, values are functions that should be run when corresponding keys are clicked
 const keyboardSupportMap = new Map();
 keyboardSupportMap.set(['Digit0', 'Digit1', 'Digit2', 'Digit3', 'Digit4',
-'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Numpad0', 'Numpad1',
-'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8',
-'Numpad9', 'NumpadDecimal', 'Comma'], populateDisplay);
+    'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Numpad0', 'Numpad1',
+    'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8',
+    'Numpad9', 'NumpadDecimal', 'Comma'], populateDisplay);
 keyboardSupportMap.set(['NumpadAdd', 'NumpadSubtract', 'NumpadMultiply', 'NumpadDivide']
-, operatorClick)
+    , operatorClick)
 keyboardSupportMap.set(['Enter', 'Equal'], equalsCompute);
 keyboardSupportMap.set(['Backspace', 'Escape'], backspace);
 
@@ -20,9 +20,9 @@ keyboardSupportMap.set(['Backspace', 'Escape'], backspace);
 
 // Add event listeners
 buttons.filter(button => 'value' in button.dataset)
-       .forEach(button => button.addEventListener('click', populateDisplay));    
+    .forEach(button => button.addEventListener('click', populateDisplay));
 buttons.filter(button => button.classList.contains('operator'))
-       .forEach(button => button.addEventListener('click', operatorClick));
+    .forEach(button => button.addEventListener('click', operatorClick));
 buttons.find(button => button.classList.contains('equals')).addEventListener('click', equalsCompute);
 document.getElementById('clearBtn').addEventListener('click', clearDisplay);
 document.getElementById('deleteBtn').addEventListener('click', backspace);
@@ -31,7 +31,7 @@ window.addEventListener('keydown', keyToFunctionCall);
 
 
 let currentStep = 1; // Variable for keeping track of user input
-let currentNumber1; 
+let currentNumber1;
 let currentOperator;
 let alreadyDecimal = false; // variable for keeping track if user has already input a decimal dot in current phase
 
@@ -63,18 +63,18 @@ function populateDisplay(e) {
             if (currentStep === 1
                 && display.textContent.trim() !== ''
                 && alreadyDecimal === false) {
-                    console.log('this');
+                console.log('this');
+                display.textContent += value;
+                toggleAlreadyDecimal(true);
+            }
+            else if (currentStep === 2
+                && alreadyDecimal === false) {
+                let currentInput = display.textContent.split(currentOperator);
+                if (currentInput[currentInput.length - 1].trim() !== '') {
                     display.textContent += value;
                     toggleAlreadyDecimal(true);
                 }
-            else if (currentStep === 2
-                && alreadyDecimal === false) {
-                    let currentInput = display.textContent.split(currentOperator);
-                    if (currentInput[currentInput.length - 1].trim() !== '') {
-                        display.textContent += value;
-                        toggleAlreadyDecimal(true);
-                    }
-                }
+            }
         }
         else if (value !== '.') {
             display.textContent += value;
@@ -122,7 +122,7 @@ function operatorClick(e) {
             }
             else {
                 equalsCompute();
-                if (output.textContent === 'ZERO DIVISION ERROR') {break;}
+                if (output.textContent === 'ZERO DIVISION ERROR') { break; }
                 display.textContent = `${output.textContent} ${operator} `;
                 currentNumber1 = Number(output.textContent);
                 currentOperator = operator;
@@ -155,16 +155,16 @@ function operate(n1, n2, operator) {
                 return 'ZERO DIVISION ERROR';
             }
             else if (n1 % n2 === 0) {
-                return n1/n2;
+                return n1 / n2;
             }
             else {
-                return Math.round((n1/n2)*10000000000)/10000000000;
+                return Math.round((n1 / n2) * 10000000000) / 10000000000;
             }
         case 'x':
             if (String(n1).includes('.') || String(n2).includes('.')) {
-                return Math.round((n1*n2)*10000000000)/10000000000;
+                return Math.round((n1 * n2) * 10000000000) / 10000000000;
             }
-            return n1*n2;
+            return n1 * n2;
         case '-':
             return n1 - n2;
     }
@@ -178,7 +178,7 @@ function equalsCompute() {
     console.log(currentInput);
     let currentNumber2 = Number(currentInput[currentInput.length - 1]);
     if (currentStep != 2 || isNaN(currentNumber2) ||
-     currentInput[currentInput.length - 1].trim() === "") { // ignores equal click before having a full expression to compute
+        currentInput[currentInput.length - 1].trim() === "") { // ignores equal click before having a full expression to compute
         return;
     }
     console.log(currentNumber1);
