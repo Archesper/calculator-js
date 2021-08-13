@@ -4,6 +4,20 @@ const buttons = Array.from(document.querySelectorAll('button'));
 const display = document.getElementById('inputDiv');
 const output = document.getElementById('outputDiv');
 
+// Initialize keyboardSupportMap
+// Keys are event code arrays, values are functions that should be run when corresponding keys are clicked
+const keyboardSupportMap = new Map();
+keyboardSupportMap.set(['Digit0', 'Digit1', 'Digit2', 'Digit3', 'Digit4',
+'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Numpad0', 'Numpad1',
+'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8',
+'Numpad9', 'NumpadDecimal', 'Comma'], populateDisplay);
+keyboardSupportMap.set(['NumpadAdd', 'NumpadSubtract', 'NumpadMultiply', 'NumpadDivide']
+, operatorClick)
+keyboardSupportMap.set(['Enter', 'Equal'], equalsCompute);
+keyboardSupportMap.set(['Backspace', 'Escape'], backspace);
+
+
+
 // Add event listeners
 buttons.filter(button => 'value' in button.dataset)
        .forEach(button => button.addEventListener('click', populateDisplay));    
@@ -12,14 +26,30 @@ buttons.filter(button => button.classList.contains('operator'))
 buttons.find(button => button.classList.contains('equals')).addEventListener('click', equalsCompute);
 document.getElementById('clearBtn').addEventListener('click', clearDisplay);
 document.getElementById('deleteBtn').addEventListener('click', backspace);
+// Event listener for keyboard support
+window.addEventListener('keydown', keyToFunctionCall);
+
 
 let currentStep = 1; // Variable for keeping track of user input
 let currentNumber1; 
 let currentOperator;
 let alreadyDecimal = false; // variable for keeping track if user has already input a decimal dot in current phase
 
+
+
 function populateDisplay(e) {
-    const value = e.target.dataset.value;
+    let value;
+    if (!(e instanceof Event)) { // Keyboard support
+        if (e === 'NumpadDecimal' || e === 'Comma') {
+            value = '.';
+        }
+        else {
+            value = e[e.length - 1];
+        }
+    }
+    else {
+        value = e.target.dataset.value;
+    }
     if (currentStep === 3 && value !== '.') { // If a result was just output, clear output screen 
         display.textContent = value;
         output.textContent = '';
@@ -53,7 +83,25 @@ function populateDisplay(e) {
 }
 
 function operatorClick(e) {
-    const operator = e.target.textContent;
+    let operator;
+    if (!(e instanceof Event)) { // Keyboard support
+        switch (e) {
+            case 'NumpadAdd':
+                operator = '+';
+                break;
+            case 'NumpadSubtract':
+                operator = '-';
+                break;
+            case 'NumpadMultiply':
+                operator = 'x';
+                break;
+            case 'NumpadDivide':
+                operator = '÷';
+        }
+    }
+    else {
+        operator = e.target.textContent;
+    }
     switch (currentStep) {
         case 1: // Operator has yet to be chosen
             currentNumber1 = Number(display.textContent);
@@ -189,3 +237,15 @@ function toggleAlreadyDecimal(bool) {
         decimalButton.classList.remove('inactive');
     }
 }
+
+function keyToFunctionCall(e) {
+    const code = e.code;
+    keys = keyboardSupportMap.keys();
+    for (const key of keys) {
+        if (key.includes(code)) {
+            const functionTocall = keyboardSupportMap.get(key);
+            functionTocall(code);
+        }
+    }
+}
+
