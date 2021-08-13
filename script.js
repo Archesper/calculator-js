@@ -11,13 +11,14 @@ buttons.filter(button => button.classList.contains('operator'))
        .forEach(button => button.addEventListener('click', operatorClick));
 buttons.find(button => button.classList.contains('equals')).addEventListener('click', equalsCompute);
 document.getElementById('clearBtn').addEventListener('click', clearDisplay);
+document.getElementById('deleteBtn').addEventListener('click', backspace);
 
 let currentStep = 1; // Variable for keeping track of user input
 let currentNumber1; 
 let currentOperator;
 
 function populateDisplay(e) {
-    if (currentStep === 3) {
+    if (currentStep === 3) { // If a result was just output, clear output screen 
         display.textContent = e.target.dataset.value;
         output.textContent = '';
         currentStep = 1;
@@ -120,4 +121,26 @@ function clearDisplay() {
     currentStep = 1;
     currentNumber1 = undefined;
     currentOperator = undefined;
+}
+
+function backspace() {
+    switch (currentStep) {
+        case 1:
+            display.textContent = display.textContent.slice(0, -1);
+            break;
+        case 2:
+            let currentInput = display.textContent.split(currentOperator);
+            if (currentInput[currentInput.length - 1].trim() === '') { // If second number has yet to be input
+                display.textContent = display.textContent.slice(0, -3); // Starting from -3 to account for the whitespaces the operateClick() function introduces
+                currentOperator = undefined;
+                currentStep = 1;
+            }
+            else {
+                display.textContent = display.textContent.slice(0, -1);
+            }
+            break;
+        case 3:
+            output.textContent = '';
+            currentStep = 2;
+    }
 }
